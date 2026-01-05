@@ -26,7 +26,7 @@ In Blender, the files behave as intended.
 
 Below is an example of rendering and playing back `a.sc3` using this code.
 
-![Screenshot](path/to/your/image.png)
+![Screenshot](image/test_1.png)
 
 ---
 
