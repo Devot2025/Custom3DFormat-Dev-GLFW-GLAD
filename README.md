@@ -38,7 +38,11 @@ The following are required **before building and running this project**:
 Below is an example of rendering and playing back `a.sc3` using this code.
 
 ![Screenshot](image/test_1.png)
+## Demo Video
 
+This video shows loading and playing back `a.sc3`.
+
+https://github.com/image/test_2.webm
 ---
 
 ## Notes
