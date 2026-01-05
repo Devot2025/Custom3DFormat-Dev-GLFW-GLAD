@@ -1,0 +1,31 @@
+#ifndef _GL_SYS_TYPE_HINT_
+#define _GL_SYS_TYPE_HINT_
+#include "glsys.hint"
+template <typename Ty>
+constexpr GLenum fix_gl_type();
+template<>
+constexpr GLenum fix_gl_type<float>(){
+	return GL_FLOAT;
+}
+template<>
+constexpr GLenum fix_gl_type<int>(){
+	return GL_INT;
+}
+template<>
+constexpr GLenum fix_gl_type<double>(){
+	return GL_DOUBLE;
+}
+template <>
+constexpr GLenum fix_gl_type<uint8_t>(){
+	return GL_UNSIGNED_BYTE;
+}
+template <>
+constexpr GLenum fix_gl_type<uint16_t>(){
+	return GL_UNSIGNED_SHORT;
+}
+
+template <>
+constexpr GLenum fix_gl_type<uint32_t>(){
+	return GL_UNSIGNED_INT;
+}
+#endif

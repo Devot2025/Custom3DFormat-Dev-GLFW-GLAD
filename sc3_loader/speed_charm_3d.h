@@ -4,7 +4,7 @@
 #include <prog_c/std_ext/ext_alloc.h>
 #include <prog_c/std_ext/ext_os_strs.h>
 #include <c_header_helper.hint>
-#include <prog_c/sc_data_policy/speed_charm_policy.h>
+#include <sc_data_policy/speed_charm_policy.h>
 
 #include <prog_c/std_ext/ext_strs.h>
 
