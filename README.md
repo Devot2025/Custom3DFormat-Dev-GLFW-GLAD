@@ -41,8 +41,7 @@ Below is an example of rendering and playing back `a.sc3` using this code.
 ## Demo Video
 
 This video shows loading and playing back `a.sc3`.
-
-https://github.com/image/test_2.webm
+[test_2.webm](https://github.com/user-attachments/assets/9f9edff9-3dd9-4478-90ed-3bfa1bd60b63)
 ---
 
 ## Notes
