@@ -12,7 +12,7 @@ ufbx_scene * loading_simple_fbx(const char * fbx_file_path, float default_size){
     return __scene;
 }
 
-Speed_Charm_3D_Main * change_fbx_speed_charm_3d(const char * fbx_file_path, float default_size){
+Speed_Charm_3D_Main * convert_fbx_speed_charm_3d(const char * fbx_file_path, float default_size){
     if(default_size != 0.0f) default_size = 1.0f / default_size;
     else default_size = 1.0f;
     if(!fbx_file_path) return NULL;
@@ -23,22 +23,22 @@ Speed_Charm_3D_Main * change_fbx_speed_charm_3d(const char * fbx_file_path, floa
     sc3_main->meshes_num = f_scene->meshes.count;
     sc3_main->sc_meshes = smart_calloc(Speed_Charm_3D_Mesh, f_scene->meshes.count);
     Speed_Charm_3D_Bone_Map_Cache * bone_list = smart_calloc(Speed_Charm_3D_Bone_Map_Cache , sc3_main->meshes_num);
-    for(sc_size i = 0; i < sc3_main->meshes_num; ++i) change_fbx_speed_charm_3d_mesh(&sc3_main->sc_meshes[i], &bone_list[i], f_scene->meshes.data[i]);
+    for(sc_size i = 0; i < sc3_main->meshes_num; ++i) convert_fbx_speed_charm_3d_mesh(&sc3_main->sc_meshes[i], &bone_list[i], f_scene->meshes.data[i]);
     
     sc3_main->skeletons_num = f_scene->nodes.count;
     sc3_main->sc_skeletons = smart_calloc(Speed_Charm_3D_Skeleton, sc3_main->skeletons_num);
     for(sc_size i = 0; i < sc3_main->skeletons_num; ++i){
         sc3_main->sc_skeletons[i].parent = f_scene->nodes.data[i]->parent ? f_scene->nodes.data[i]->parent->typed_id : -1;
-        change_fbx_mat_to_sc3_mesh_mat(&sc3_main->sc_skeletons[i].node.to_world , &f_scene->nodes.data[i]->node_to_world);
-        change_fbx_mat_to_sc3_mesh_mat(&sc3_main->sc_skeletons[i].node.to_parent , &f_scene->nodes.data[i]->node_to_parent);
-        //change_fbx_mat_to_sc3_mesh_mat(&sc3_main->sc_bones[i].skl_inv , &f_scene->nodes.data[i]->node_to_parent);
+        convert_fbx_mat_to_sc3_mesh_mat(&sc3_main->sc_skeletons[i].node.to_world , &f_scene->nodes.data[i]->node_to_world);
+        convert_fbx_mat_to_sc3_mesh_mat(&sc3_main->sc_skeletons[i].node.to_parent , &f_scene->nodes.data[i]->node_to_parent);
+        //convert_fbx_mat_to_sc3_mesh_mat(&sc3_main->sc_bones[i].skl_inv , &f_scene->nodes.data[i]->node_to_parent);
     }
 
     sc3_main->anim_num = f_scene->anim_stacks.count;
     
     sc3_main->sc_anim = smart_calloc(Speed_Charm_3D_Anim, sc3_main->anim_num);
     
-    for(sc_size i = 0; i < sc3_main->anim_num; ++i) change_fbx_speed_charm_3d_anim(&sc3_main->sc_anim[i], f_scene->nodes.data, f_scene->nodes.count, f_scene->anim_stacks.data[i]);
+    for(sc_size i = 0; i < sc3_main->anim_num; ++i) convert_fbx_speed_charm_3d_anim(&sc3_main->sc_anim[i], f_scene->nodes.data, f_scene->nodes.count, f_scene->anim_stacks.data[i]);
     
     Speed_Charm_3D_Bone_Map * sc3_bone_map__;
     
@@ -121,7 +121,7 @@ Speed_Charm_3D_Main * change_fbx_speed_charm_3d(const char * fbx_file_path, floa
     return sc3_main;
 }
 
-void change_fbx_speed_charm_3d_bones_anim(Speed_Charm_3D_Anim_Deform * sc3_anim_def, Speed_Charm_3D_Anim * sc3_anim, ufbx_anim_stack * fbx_anim_stack, ufbx_node * fbx_node){
+void convert_fbx_speed_charm_3d_bones_anim(Speed_Charm_3D_Anim_Deform * sc3_anim_def, Speed_Charm_3D_Anim * sc3_anim, ufbx_anim_stack * fbx_anim_stack, ufbx_node * fbx_node){
     sc3_anim_def->rot = smart_calloc(SGG_Vector4, sc3_anim->frame_num);
     sc3_anim_def->pos = smart_calloc(SGG_Vector3, sc3_anim->frame_num);
     sc3_anim_def->scale = smart_calloc(SGG_Vector3, sc3_anim->frame_num);
@@ -131,9 +131,9 @@ void change_fbx_speed_charm_3d_bones_anim(Speed_Charm_3D_Anim_Deform * sc3_anim_
 	for (size_t i = 0; i < sc3_anim->frame_num; i++) {
 		double time = fbx_anim_stack->time_begin + (double)i / sc3_anim->framerate;
 		ufbx_transform transform = ufbx_evaluate_transform(fbx_anim_stack->anim, fbx_node, time);
-        change_fbx_vec4_to_sc3_vec4(&sc3_anim_def->rot[i], &transform.rotation);
-        change_fbx_vec3_to_sc3_vec3(&sc3_anim_def->pos[i], &transform.translation);
-        change_fbx_vec3_to_sc3_vec3(&sc3_anim_def->scale[i], &transform.scale);
+        convert_fbx_vec4_to_sc3_vec4(&sc3_anim_def->rot[i], &transform.rotation);
+        convert_fbx_vec3_to_sc3_mesh_vec3(&sc3_anim_def->pos[i], &transform.translation);
+        convert_fbx_vec3_to_sc3_mesh_vec3(&sc3_anim_def->scale[i], &transform.scale);
         
 		if (i > 0) {
 			float dot = sgg_dot_vector4(&sc3_anim_def->rot[i], &sc3_anim_def->rot[i - 1]);
@@ -162,7 +162,7 @@ void change_fbx_speed_charm_3d_bones_anim(Speed_Charm_3D_Anim_Deform * sc3_anim_
     }
 }
 
-void change_fbx_speed_charm_3d_anim(Speed_Charm_3D_Anim * sc3_anim, ufbx_node ** fbx_node, sc_size node_size, ufbx_anim_stack * fbx_anim){
+void convert_fbx_speed_charm_3d_anim(Speed_Charm_3D_Anim * sc3_anim, ufbx_node ** fbx_node, sc_size node_size, ufbx_anim_stack * fbx_anim){
     const float target_framerate = FBX_NORMAL_FRAMERATE;
     const size_t max_frames = FBX_MAX_FRAMERATE;
 	float duration = (float)fbx_anim->time_end - (float)fbx_anim->time_begin;
@@ -174,11 +174,11 @@ void change_fbx_speed_charm_3d_anim(Speed_Charm_3D_Anim * sc3_anim, ufbx_node **
     sc3_anim->frame_num = frames_num;
     sc3_anim->anim_deforms = smart_calloc(Speed_Charm_3D_Anim_Deform, node_size);
     for(sc_size i = 0; i < node_size; ++i){
-        change_fbx_speed_charm_3d_bones_anim(&sc3_anim->anim_deforms[i], sc3_anim, fbx_anim, fbx_node[i]);
+        convert_fbx_speed_charm_3d_bones_anim(&sc3_anim->anim_deforms[i], sc3_anim, fbx_anim, fbx_node[i]);
     }
 }
 
-void change_fbx_speed_charm_3d_mesh(Speed_Charm_3D_Mesh * sc3_mesh, Speed_Charm_3D_Bone_Map_Cache * bone_list, ufbx_mesh * fbx_mesh){
+void convert_fbx_speed_charm_3d_mesh(Speed_Charm_3D_Mesh * sc3_mesh, Speed_Charm_3D_Bone_Map_Cache * bone_list, ufbx_mesh * fbx_mesh){
     sc_uint f_tri_num = 0;
     sc_uint f_parts_num = 0;
     count_fbx_mesh_part(fbx_mesh, &f_tri_num, &f_parts_num);
@@ -220,7 +220,7 @@ void change_fbx_speed_charm_3d_mesh(Speed_Charm_3D_Mesh * sc3_mesh, Speed_Charm_
             }
         }
     }
-    change_fbx_attribute_to_sc3_attribute(sc3_mesh, bone_list, fbx_mesh, skin_deformer, f_tri_num, mesh_skin_attribute);
+    convert_fbx_attribute_to_sc3_attribute(sc3_mesh, bone_list, fbx_mesh, skin_deformer, f_tri_num, mesh_skin_attribute);
     /*
     if(skin_deformer){
         sc_size node_size = skin_deformer->clusters.count;
@@ -251,7 +251,7 @@ void change_fbx_speed_charm_3d_mesh(Speed_Charm_3D_Mesh * sc3_mesh, Speed_Charm_
     s_free(mesh_skin_attribute);
 }
 
-void change_fbx_attribute_to_sc3_attribute(Speed_Charm_3D_Mesh * sc3_mesh, Speed_Charm_3D_Bone_Map_Cache * bone_map, ufbx_mesh * fbx_mesh, ufbx_skin_deformer * fbx_skin, sc_uint fbx_triangle_num, Speed_Charm_3D_Skin_Attr * skin_attribute){
+void convert_fbx_attribute_to_sc3_attribute(Speed_Charm_3D_Mesh * sc3_mesh, Speed_Charm_3D_Bone_Map_Cache * bone_map, ufbx_mesh * fbx_mesh, ufbx_skin_deformer * fbx_skin, sc_uint fbx_triangle_num, Speed_Charm_3D_Skin_Attr * skin_attribute){
     sc_uint * mesh_indices = smart_calloc(sc_uint, fbx_mesh->max_face_triangles * DIMENSION_XYZ);
     sc_uint * mesh_triangle_indices = smart_calloc(sc_uint, fbx_triangle_num * DIMENSION_XYZ);
     if(!mesh_indices)return;
@@ -353,7 +353,7 @@ void change_fbx_attribute_to_sc3_attribute(Speed_Charm_3D_Mesh * sc3_mesh, Speed
             ufbx_skin_cluster *cl = fbx_skin->clusters.data[g];
             bone_map->bones[ps].ind = (sc_uint)cl->bone_node->typed_id;
             
-            change_fbx_mat_to_sc3_mesh_mat(&bone_map->bones[ps].inverse_mat, &cl->geometry_to_bone);
+            convert_fbx_mat_to_sc3_mesh_mat(&bone_map->bones[ps].inverse_mat, &cl->geometry_to_bone);
             ++ps;
         }
 
@@ -438,7 +438,7 @@ if(fbx_skin){
         g2l[g] = ps;
         ufbx_skin_cluster *cl = fbx_skin->clusters.data[g];
         sc3_mesh->tttt[ps].bone_ind = (sc_uint)cl->bone_node->typed_id;
-        change_fbx_mat_to_sc3_mesh_mat(&sc3_mesh->tttt[ps].bone_map, &cl->geometry_to_bone);
+        convert_fbx_mat_to_sc3_mesh_mat(&sc3_mesh->tttt[ps].bone_map, &cl->geometry_to_bone);
         ++ps;
     }
     
