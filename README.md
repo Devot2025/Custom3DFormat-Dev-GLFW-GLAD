@@ -1,49 +1,59 @@
-# self-form-3d-testbed
+# Custom3DFormat-Dev-GLFW-GLAD
 
-A testbed for exploring self-forming and self-organizing 3D geometries using computational and topological approaches.
+Developing and testing a **custom 3D format** using **GLFW** and **GLAD**.
+
+A small testbed for exploring and validating a self-forming 3D data format through real-time rendering.
 
 ---
 
 ## Overview
 
-This repository contains code for **loading and running a self-forming 3D file format**.
+This repository contains code for **loading, running, and testing a custom self-forming 3D file format**.
 
-The meshes used here are simple, and the animations may look somewhat unusual.  
-However, the core logic itself is likely correct and has not changed since the initial implementation.
+The meshes used here are intentionally simple, and the resulting animations may appear unusual.
+However, the underlying logic is believed to be correct and has remained mostly unchanged since its initial development.
 
-The `.sc3` files are **created and tested in Blender**, and the same data is used directly in this project.  
-In Blender, the files behave as intended.
+The `.sc3` files are **authored and tested in Blender**, and the same data is used directly in this project.
+Within Blender, the files behave as intended.
 
 ---
 
 ## Requirements
 
-The following are required **before building and running this project**:
+Before building and running this project, ensure the following are installed:
 
 - **OpenGL**
 - **GLFW**
+- **GLAD**
 
 ---
 
-## Self-Forming 3D Format
+## Custom 3D Format
 
-- The self-forming 3D file format uses the extension **`.sc3`**
-- The example used in this repository is **`a.sc3`**
-- The format is experimental, and its specification may change in the future
+- The custom 3D format uses the extension **`.sc3`**
+- The example provided in this repository is **`a.sc3`**
+- The format is experimental and **its specification may change**
 
 ---
 
 ## Screenshot
 
-Below is an example of rendering and playing back `a.sc3` using this code.
+Below is an example rendering and playback of `a.sc3` using this project:
 
 ![Screenshot](image/test_1.png)
+
+---
+
 ## Demo Video
 
-This video shows loading and playing back `a.sc3`.
-[test_2.webm](https://github.com/user-attachments/assets/9f9edff9-3dd9-4478-90ed-3bfa1bd60b63)
+This video demonstrates loading and playing back `a.sc3`:
+
+https://github.com/user-attachments/assets/9f9edff9-3dd9-4478-90ed-3bfa1bd60b63
+
 ---
 
 ## Notes
-- This project is a small **experimental playground**
-- The visuals are rough, but the focus is on **making the self-forming data work**
+
+- This repository is a small **experimental playground**
+- Visual quality is rough, but the goal is verifying the **custom 3D format and its runtime behavior**
+- Expect simple meshes and work-in-progress features
